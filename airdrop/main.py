@@ -113,6 +113,32 @@ def get_streamswap_buyers() -> dict[str, int]:
 
     return buyers
 
+# manual_additions returns the addresses & udgn tokens manually given by the team,
+# despite these users not meeting the airdrop requirements in any way.
+def manual_additions() -> dict[str, int]:
+    with open(f"./snapshots/manual_additions.txt") as f:
+        data = f.readlines()
+
+    manual: dict[str, int] = {}
+    for line in data:
+        # Judestru	cosmos12dq9cytc55u24r2raw2puuh8xpcrtvd3528jjf					490 DGN
+        try:
+            name, address, _, _, _, _, dragon = line.split("\t")
+
+            address = address.strip()
+            if not address.startswith('cosmos'):
+                address = address_convert(address, "cosmos")
+                print("errr", address)
+                continue
+
+            # remove any white sopace or non numerical cahracters from dragon
+            dragon = dragon.lower().replace(" ", "").replace("dgn", "").replace("ddgn", "").replace("d", "")
+
+            manual[address] = int(float(dragon) * 1_000_000)
+        except Exception as e:
+            print(e)
+            print(line)
+    return manual
 
 def get_mad_sci_holders() -> dict[str, None]:
     holders = {}
@@ -159,6 +185,8 @@ def main():
 
     streamswap: dict[str, int] = get_streamswap_buyers()
 
+    # added on at the end
+    manual = manual_additions()
 
     for d in get_cosmos_delegators():
         # do not repeat since we already get all staked shares
@@ -206,12 +234,12 @@ def main():
     get_unique_shares(allocs)
 
     # iterate styreamswap addresses & add to allocs if found, if not found, append new
-    for addr, udgnPurcahsed in streamswap.items():
+    for addr, udgn in streamswap.items():
         # update the value in allocs if found
         found = False
         for a in allocs:
             if a["address"] == addr:
-                a["dragon"] += (udgnPurcahsed/1_000_000)
+                a["dragon"] += (udgn/1_000_000)
                 found = True
                 break
 
@@ -220,7 +248,24 @@ def main():
             allocs.append({
                 "address": addr,
                 "shares": 0,
-                "dragon": (udgnPurcahsed/1_000_000)
+                "dragon": (udgn/1_000_000)
+            })
+
+    for addr, udgn in manual.items():
+        # update the value in allocs if found
+        found = False
+        for a in allocs:
+            if a["address"] == addr:
+                a["dragon"] += (udgn/1_000_000)
+                found = True
+                break
+
+        if not found:
+            print(f"Manual buyer {addr} not found in airdrop allocations, adding new entry")
+            allocs.append({
+                "address": addr,
+                "shares": 0,
+                "dragon": (udgn/1_000_000)
             })
 
     s = sorted(allocs, key=lambda x: x["dragon"], reverse=True)
