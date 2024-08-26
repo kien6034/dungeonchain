@@ -76,7 +76,7 @@ update_genesis '.app_state["slashing"]["params"]["downtime_jail_duration"]="60s"
 update_genesis '.app_state["slashing"]["params"]["slash_fraction_double_sign"]="0.000000000000000000"'
 update_genesis '.app_state["slashing"]["params"]["slash_fraction_downtime"]="0.000000000000000000"'
 
-update_genesis '.app_state["staking"]["params"]["bond_denom"]="udgn"' # leaving unbonding time at 1814400s (21 days)
+update_genesis '.app_state["staking"]["params"]["bond_denom"]="udgn"'
 update_genesis '.app_state["staking"]["params"]["min_commission_rate"]="0.000000000000000000"'
 update_genesis '.app_state["staking"]["params"]["max_validators"]=20' # 0%?
 
@@ -95,6 +95,8 @@ update_genesis '.app_state["ccvconsumer"]["params"]["consumer_redistribution_fra
 # update_genesis '.app_state["ccvconsumer"]["params"]["provider_fee_pool_addr_str"]=""'
 update_genesis '.app_state["ccvconsumer"]["params"]["reward_denoms"]=["udgn"]'
 update_genesis '.app_state["ccvconsumer"]["params"]["provider_reward_denoms"]=["uatom"]'
+update_genesis '.app_state["ccvconsumer"]["params"]["unbonding_period"]="1814400s"' # leaving unbonding time at 1814400s (21 days)
+update_genesis '.app_state["ccvconsumer"]["new_chain"]=true'
 
 ## === GENESIS ACCOUNTS ===
 
