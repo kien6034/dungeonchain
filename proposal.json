@@ -1,0 +1,21 @@
+{
+    "messages": [
+        {
+            "@type": "/cosmos.upgrade.v1beta1.MsgSoftwareUpgrade",
+            "authority": "dungeon10d07y265gmmuvt4z0w9aw880jnsr700j53vrug",
+            "plan": {
+                "name": "v1",
+                "height": "54",
+                "info": {
+  "binaries": {
+    "linux/amd64": "file:///Users/kien6034/personal/cosmos/dungeonchain/_build/new/dungeond.tar?checksum=sha256:5d983f32ec50dce317206e58ceb8bad4417ea348961a147c7dfa0a26299a0657"
+  }
+},
+                "upgraded_client_state": null
+            }
+        }
+    ],
+    "metadata": "ipfs://CID",
+    "deposit": "20000000udgn",
+    "title": "Software Upgrade v1"
+}
