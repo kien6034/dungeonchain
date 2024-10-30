@@ -7,10 +7,11 @@ import (
 
 	"github.com/Crypto-Dungeon/dungeonchain/app/upgrades"
 	"github.com/Crypto-Dungeon/dungeonchain/app/upgrades/noop"
+	"github.com/Crypto-Dungeon/dungeonchain/app/upgrades/v1"
 )
 
 // Upgrades list of chain upgrades
-var Upgrades = []upgrades.Upgrade{}
+var Upgrades = []upgrades.Upgrade{v1.Upgrade}
 
 // RegisterUpgradeHandlers registers the chain upgrade handlers
 func (app *ChainApp) RegisterUpgradeHandlers() {
@@ -22,6 +23,7 @@ func (app *ChainApp) RegisterUpgradeHandlers() {
 
 	keepers := upgrades.AppKeepers{
 		AccountKeeper:         &app.AccountKeeper,
+		BankKeeper:            &app.BankKeeper,
 		ParamsKeeper:          &app.ParamsKeeper,
 		ConsensusParamsKeeper: &app.ConsensusParamsKeeper,
 		CapabilityKeeper:      app.CapabilityKeeper,
