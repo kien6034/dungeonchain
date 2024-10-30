@@ -109,7 +109,6 @@ run_upgrade () {
             }
         }
     ],
-    "metadata": "ipfs://CID",
     "deposit": "20000000${DENOM}",
     "title": "Software Upgrade $SOFTWARE_UPGRADE_NAME"
 }
