@@ -8,3 +8,8 @@ airdrop/chains/*.lz4
 airdrop/snapshots/*.json
 __pycache__/
 data/
+
+_build/
+mytestnet
+build/
+screenlog.0

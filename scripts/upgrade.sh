@@ -49,14 +49,14 @@ then
     GOBIN="$ROOT/_build/new" go install -mod=readonly ./...
 fi
 
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    echo "running old node"
-    screen -L -dmS node1 bash scripts/run-node-test.sh _build/old/$BINARY $DENOM --Logfile $HOME/log-screen.txt
-else
-    screen -L -Logfile $HOME/log-screen.txt -dmS node1 bash scripts/run-node-test.sh _build/old/$BINARY $DENOM
-fi
+# if [[ "$OSTYPE" == "darwin"* ]]; then
+#     echo "running old node"
+#     screen -L -dmS node1 bash scripts/run-node-test.sh _build/old/$BINARY $DENOM --Logfile $HOME/log-screen.txt
+# else
+#     screen -L -Logfile $HOME/log-screen.txt -dmS node1 bash scripts/run-node-test.sh _build/old/$BINARY $DENOM
+# fi
 
-sleep 5 # wait for note to start
+# sleep 5 # wait for note to start
 
 
 run_fork () {
