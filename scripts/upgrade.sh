@@ -3,12 +3,12 @@
 # the upgrade is a fork, "true" otherwise
 FORK=${FORK:-"false"}
 
-OLD_VERSION=v0.1.0
+OLD_VERSION=v0.1.0-tweak-ccv
 UPGRADE_WAIT=${UPGRADE_WAIT:-20}
 HOME=mytestnet
 ROOT=$(pwd)
 DENOM=udgn
-CHAIN_ID=localdungeon
+CHAIN_ID=localchain-1
 SOFTWARE_UPGRADE_NAME="v1"
 SLEEP_TIME=1
 BINARY=dungeond
@@ -25,11 +25,12 @@ export GOMODCACHE=$ROOT/_build/gocache
 
 # install old binary if not exist
 #https://github.com/Crypto-Dungeon/dungeonchain/archive/refs/tags/v0.1.0.zip
+#https://github.com/kien6034/dungeonchain/archive/refs/tags/v0.1.0-tweak-ccv.zip
 # Checkin old binary
 if [ ! -f "_build/$OLD_VERSION.zip" ] &> /dev/null
 then
     mkdir -p _build/old
-    wget -c "https://github.com/Crypto-Dungeon/dungeonchain/archive/refs/tags/${OLD_VERSION}.zip" -O _build/${OLD_VERSION}.zip
+    wget -c "https://github.com/kien6034/dungeonchain/archive/refs/tags/${OLD_VERSION}.zip" -O _build/${OLD_VERSION}.zip
     unzip _build/${OLD_VERSION}.zip -d _build
 fi
 
@@ -87,10 +88,10 @@ run_upgrade () {
     SUM=$(shasum -a 256 ./_build/new/$BINARY.tar | cut -d ' ' -f1)
 
 
-    UPGRADE_INFO=$(jq -n {"binaries":{"linux/amd64":"file://'$(pwd)'/_build/new/'$BINARY'.tar?checksum=sha256:'"$SUM"'"}})
+    # Create the upgrade info JSON with proper escaping
+UPGRADE_INFO="{\\\"binaries\\\":{\\\"linux/amd64\\\":\\\"file://${PWD}/build/new/dungeond.tar?checksum=sha256:4cdc3a95a0695608556731428a698a5a456c7b57d7c8d260eb176cec97330649\\\"}}"
 
-
-    cat > proposal.json << EOF
+cat > proposal.json << EOF
 {
     "messages": [
         {
@@ -98,15 +99,14 @@ run_upgrade () {
             "authority": "dungeon10d07y265gmmuvt4z0w9aw880jnsr700j53vrug",
             "plan": {
                 "name": "$SOFTWARE_UPGRADE_NAME",
-                "time": "0001-01-01T00:00:00Z",
                 "height": "$UPGRADE_HEIGHT",
-                "info": "$UPGRADE_INFO",
+                "info": "${UPGRADE_INFO}",
                 "upgraded_client_state": null
             }
         }
     ],
     "metadata": "ipfs://CID",
-    "deposit": "20000000${DENOM}",
+    "deposit": "2000000${DENOM}",
     "title": "Software Upgrade $SOFTWARE_UPGRADE_NAME",
     "summary": "Upgrade to version $SOFTWARE_UPGRADE_NAME",
     "expedited": false
@@ -117,13 +117,13 @@ EOF
     echo "Proposal content:"
     cat proposal.json
 
-exit 0
   ./_build/old/$BINARY tx gov submit-proposal proposal.json \
       --from=$KEY \
       --keyring-backend=test \
       --chain-id=$CHAIN_ID \
       --home=$HOME \
       -y
+      
     exit 0
     sleep $SLEEP_TIME
 
