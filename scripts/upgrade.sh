@@ -81,7 +81,7 @@ run_upgrade () {
 
     # Get upgrade height, 12 block after (6s)
     STATUS_INFO=($(./_build/old/$BINARY status --home $HOME | jq -r '.sync_info.latest_block_height'))
-    UPGRADE_HEIGHT=$((STATUS_INFO + 50))
+    UPGRADE_HEIGHT=$((STATUS_INFO + 100))
     echo "UPGRADE_HEIGHT = $UPGRADE_HEIGHT"
 
     tar -cf ./_build/new/$BINARY.tar -C ./_build/new $BINARY
@@ -106,7 +106,7 @@ cat > proposal.json << EOF
         }
     ],
     "metadata": "ipfs://CID",
-    "deposit": "2000000${DENOM}",
+    "deposit": "1000000000${DENOM}",
     "title": "Software Upgrade $SOFTWARE_UPGRADE_NAME",
     "summary": "Upgrade to version $SOFTWARE_UPGRADE_NAME",
     "expedited": false
@@ -124,18 +124,14 @@ EOF
       --home=$HOME \
       -y
       
-    exit 0
     sleep $SLEEP_TIME
 
-    ./_build/old/$BINARY tx gov deposit 1 "20000000${DENOM}" --from $KEY --keyring-backend test --chain-id $CHAIN_ID --home $HOME -y > /dev/null
 
-    sleep $SLEEP_TIME
-
-    ./_build/old/$BINARY tx gov vote 1 yes --from $KEY --keyring-backend test --chain-id $CHAIN_ID --home $HOME -y > /dev/null
+    ./_build/old/$BINARY tx gov vote 1 yes --from $KEY --keyring-backend test --chain-id $CHAIN_ID --home $HOME -y
 
     sleep $SLEEP_TIME
 
-    ./_build/old/$BINARY tx gov vote 1 yes --from $KEY2 --keyring-backend test --chain-id $CHAIN_ID --home $HOME -y > /dev/null
+    ./_build/old/$BINARY tx gov vote 1 yes --from $KEY2 --keyring-backend test --chain-id $CHAIN_ID --home $HOME -y 
 
     sleep $SLEEP_TIME
 
