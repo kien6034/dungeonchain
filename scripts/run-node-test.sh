@@ -95,17 +95,20 @@ from_scratch () {
     update_test_genesis '.app_state["tokenfactory"]["params"]["denom_creation_fee"]=[]'
     update_test_genesis '.app_state["tokenfactory"]["params"]["denom_creation_gas_consume"]=100000'
 
-    # === TWEEAK GOV ===
-    update_test_genesis '.app_state["gov"]["params"]["voting_period"]="30s"'
-    update_test_genesis '.app_state["gov"]["params"]["expedited_voting_period"]="10s"'
+    # # === TWEEAK GOV ===
+    # update_test_genesis '.app_state["gov"]["params"]["voting_period"]="30s"'
+    # update_test_genesis '.app_state["gov"]["params"]["expedited_voting_period"]="10s"'
 
 
     $BINARY keys list --keyring-backend $KEYRING --home $HOME_DIR
     
 
     # Allocate genesis accounts
-    $BINARY genesis add-genesis-account $KEY 100000000000$DENOM,900test --keyring-backend $KEYRING --home $HOME_DIR --append
-    $BINARY genesis add-genesis-account $KEY2 100000000000$DENOM,800test --keyring-backend $KEYRING --home $HOME_DIR --append
+    $BINARY genesis add-genesis-account $KEY 10000000000000$DENOM,900test --keyring-backend $KEYRING --home $HOME_DIR --append
+    $BINARY genesis add-genesis-account $KEY2 10000000000000$DENOM,800test --keyring-backend $KEYRING --home $HOME_DIR --append
+
+    $BINARY genesis gentx $KEY 100000000000$DENOM --keyring-backend $KEYRING --chain-id $CHAIN_ID --home $HOME_DIR
+    $BINARY genesis collect-gentxs --home $HOME_DIR
 
     # ICS provider genesis hack
     HACK_DIR=icshack-1 && echo $HACK_DIR

@@ -127,6 +127,7 @@ EOF
     sleep $SLEEP_TIME
 
 
+
     ./_build/old/$BINARY tx gov vote 1 yes --from $KEY --keyring-backend test --chain-id $CHAIN_ID --home $HOME -y
 
     sleep $SLEEP_TIME
@@ -134,6 +135,8 @@ EOF
     ./_build/old/$BINARY tx gov vote 1 yes --from $KEY2 --keyring-backend test --chain-id $CHAIN_ID --home $HOME -y 
 
     sleep $SLEEP_TIME
+
+    exit 0
 
     # determine block_height to halt
     while true; do

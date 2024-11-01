@@ -5,7 +5,7 @@
             "authority": "dungeon10d07y265gmmuvt4z0w9aw880jnsr700j53vrug",
             "plan": {
                 "name": "v1",
-                "height": "400",
+                "height": "130",
                 "info": "{\"binaries\":{\"linux/amd64\":\"file:///Users/kien6034/personal/cosmos/dungeonchain/build/new/dungeond.tar?checksum=sha256:4cdc3a95a0695608556731428a698a5a456c7b57d7c8d260eb176cec97330649\"}}",
                 "upgraded_client_state": null
             }
