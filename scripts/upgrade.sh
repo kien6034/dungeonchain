@@ -117,6 +117,7 @@ EOF
     echo "Proposal content:"
     cat proposal.json
 
+exit 0
   ./_build/old/$BINARY tx gov submit-proposal proposal.json \
       --from=$KEY \
       --keyring-backend=test \
@@ -157,7 +158,7 @@ EOF
 # if FORK = true
 if [[ "$FORK" == "true" ]]; then
     run_fork
-    unset PICA_HALT_HEIGHT
+    unset DUNGEON_HALT_HEIGHT
 else
     run_upgrade
 fi
