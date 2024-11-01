@@ -20,6 +20,7 @@ replace (
 
 	// pin version! 126854af5e6d has issues with the store so that queries fail
 	github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
+
 )
 
 require (
@@ -231,3 +232,5 @@ require (
 	pgregory.net/rapid v1.1.0 // indirect
 	sigs.k8s.io/yaml v1.4.0 // indirect
 )
+
+replace github.com/cosmos/interchain-security/v5 => github.com/kien6034/interchain-security/v5 v5.0.1-0.20241101030923-bed3596c7496
