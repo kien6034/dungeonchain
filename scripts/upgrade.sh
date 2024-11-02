@@ -10,7 +10,7 @@ ROOT=$(pwd)
 DENOM=udgn
 CHAIN_ID=localdungeon
 SOFTWARE_UPGRADE_NAME="v1"
-SLEEP_TIME=1
+SLEEP_TIME=2
 BINARY=dungeond
 export KEY="acc0"
 export KEY2="acc1"
@@ -80,14 +80,11 @@ run_upgrade () {
 
     # Get upgrade height, 12 block after (6s)
     STATUS_INFO=($(./_build/old/$BINARY status --home $HOME | jq -r '.sync_info.latest_block_height'))
-    UPGRADE_HEIGHT=$((STATUS_INFO + 50))
+    UPGRADE_HEIGHT=$((STATUS_INFO + 30))
     echo "UPGRADE_HEIGHT = $UPGRADE_HEIGHT"
 
     tar -cf ./_build/new/$BINARY.tar -C ./_build/new $BINARY
     SUM=$(shasum -a 256 ./_build/new/$BINARY.tar | cut -d ' ' -f1)
-
-
-    UPGRADE_INFO=$(jq -n {"binaries":{"linux/amd64":"file://'$(pwd)'/_build/new/'$BINARY'.tar?checksum=sha256:'"$SUM"'"}})
 
 
     cat > proposal.json << EOF
@@ -100,16 +97,15 @@ run_upgrade () {
                 "name": "$SOFTWARE_UPGRADE_NAME",
                 "time": "0001-01-01T00:00:00Z",
                 "height": "$UPGRADE_HEIGHT",
-                "info": "$UPGRADE_INFO",
+                "info": "test",
                 "upgraded_client_state": null
             }
         }
     ],
     "metadata": "ipfs://CID",
-    "deposit": "20000000${DENOM}",
+    "deposit": "200000${DENOM}",
     "title": "Software Upgrade $SOFTWARE_UPGRADE_NAME",
-    "summary": "Upgrade to version $SOFTWARE_UPGRADE_NAME",
-    "expedited": false
+    "summary": "Upgrade to version $SOFTWARE_UPGRADE_NAME"
 }
 EOF
 
@@ -123,20 +119,25 @@ EOF
       --chain-id=$CHAIN_ID \
       --home=$HOME \
       -y
-    exit 0
-    sleep $SLEEP_TIME
+    sleep 3
 
-    ./_build/old/$BINARY tx gov deposit 1 "20000000${DENOM}" --from $KEY --keyring-backend test --chain-id $CHAIN_ID --home $HOME -y > /dev/null
+    echo "Deposit"
 
-    sleep $SLEEP_TIME
+    ./_build/old/$BINARY tx gov deposit 1 "10000000${DENOM}" --from $KEY --keyring-backend test --chain-id $CHAIN_ID --home $HOME -y > /dev/null
+
+    sleep 2
+
+    echo "Vote proposal user1"
 
     ./_build/old/$BINARY tx gov vote 1 yes --from $KEY --keyring-backend test --chain-id $CHAIN_ID --home $HOME -y > /dev/null
 
-    sleep $SLEEP_TIME
+    sleep 3
+
+    echo "Vote proposal user2"
 
     ./_build/old/$BINARY tx gov vote 1 yes --from $KEY2 --keyring-backend test --chain-id $CHAIN_ID --home $HOME -y > /dev/null
 
-    sleep $SLEEP_TIME
+    sleep 5
 
     # determine block_height to halt
     while true; do

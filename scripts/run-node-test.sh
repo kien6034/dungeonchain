@@ -10,7 +10,7 @@ set -eu
 export KEY="acc0"
 export KEY2="acc1"
 
-export CHAIN_ID=${CHAIN_ID:-"localchain-1"}
+export CHAIN_ID=${CHAIN_ID:-"localdungeon"}
 export MONIKER="localvalidator"
 export KEYALGO="secp256k1"
 export KEYRING=${KEYRING:-"test"}
@@ -98,8 +98,8 @@ from_scratch () {
     $BINARY keys list --keyring-backend $KEYRING --home $HOME_DIR
 
     # Allocate genesis accounts
-    $BINARY genesis add-genesis-account $KEY 10000000$DENOM,900test --keyring-backend $KEYRING --home $HOME_DIR --append
-    $BINARY genesis add-genesis-account $KEY2 10000000$DENOM,800test --keyring-backend $KEYRING --home $HOME_DIR --append
+    $BINARY genesis add-genesis-account $KEY 100000000$DENOM,900test --keyring-backend $KEYRING --home $HOME_DIR --append
+    $BINARY genesis add-genesis-account $KEY2 100000000$DENOM,800test --keyring-backend $KEYRING --home $HOME_DIR --append
 
     # ICS provider genesis hack
     HACK_DIR=icshack-1 && echo $HACK_DIR
@@ -124,6 +124,7 @@ sed -i -e 's/cors_allowed_origins = \[\]/cors_allowed_origins = \["\*"\]/g' $HOM
 
 # REST endpoint
 sed -i -e 's/address = "tcp:\/\/localhost:1317"/address = "tcp:\/\/0.0.0.0:'$REST'"/g' $HOME_DIR/config/app.toml
+sed -i -e 's/enabled-unsafe-cors = false/enabled-unsafe-cors = true/g' $HOME_DIR/config/app.toml
 sed -i -e 's/enable = false/enable = true/g' $HOME_DIR/config/app.toml
 
 # peer exchange

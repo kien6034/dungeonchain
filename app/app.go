@@ -1199,6 +1199,7 @@ func (app *ChainApp) PreBlocker(ctx sdk.Context, _ *abci.RequestFinalizeBlock) (
 
 // BeginBlocker application updates every begin block
 func (app *ChainApp) BeginBlocker(ctx sdk.Context) (sdk.BeginBlock, error) {
+	BeginBlockForks(ctx, app)
 	return app.ModuleManager.BeginBlock(ctx)
 }
 
