@@ -2,6 +2,7 @@ package app
 
 import (
 	"fmt"
+	v1 "github.com/Crypto-Dungeon/dungeonchain/app/upgrades/v1"
 
 	upgradetypes "cosmossdk.io/x/upgrade/types"
 
@@ -11,6 +12,7 @@ import (
 
 // Upgrades list of chain upgrades
 var Upgrades = []upgrades.Upgrade{}
+var Forks = []upgrades.Fork{v1.Upgrade}
 
 // RegisterUpgradeHandlers registers the chain upgrade handlers
 func (app *ChainApp) RegisterUpgradeHandlers() {
@@ -22,6 +24,7 @@ func (app *ChainApp) RegisterUpgradeHandlers() {
 
 	keepers := upgrades.AppKeepers{
 		AccountKeeper:         &app.AccountKeeper,
+		BankKeeper:            &app.BankKeeper,
 		ParamsKeeper:          &app.ParamsKeeper,
 		ConsensusParamsKeeper: &app.ConsensusParamsKeeper,
 		CapabilityKeeper:      app.CapabilityKeeper,

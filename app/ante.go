@@ -67,7 +67,7 @@ func NewAnteHandler(options HandlerOptions) (sdk.AnteHandler, error) {
 		ante.NewSetUpContextDecorator(), // outermost AnteDecorator. SetUpContext must be called first
 		ccvconsumerante.NewMsgFilterDecorator(options.ConsumerKeeper),
 		ccvconsumerante.NewDisabledModulesDecorator("/cosmos.evidence", "/cosmos.slashing"),
-		ccvdemocracyante.NewForbiddenProposalsDecorator(consumerdemocracy.IsProposalWhitelisted, consumerdemocracy.IsModuleWhiteList),
+		ccvdemocracyante.NewForbiddenProposalsDecorator(consumerdemocracy.IsProposalWhitelisted, isModuleWhiteList),
 		wasmkeeper.NewLimitSimulationGasDecorator(options.WasmConfig.SimulationGasLimit), // after setup context to enforce limits early
 		wasmkeeper.NewCountTXDecorator(options.TXCounterStoreService),
 		wasmkeeper.NewGasRegisterDecorator(options.WasmKeeper.GetGasRegister()),
@@ -89,4 +89,22 @@ func NewAnteHandler(options HandlerOptions) (sdk.AnteHandler, error) {
 	}
 
 	return sdk.ChainAnteDecorators(anteDecorators...), nil
+}
+
+var whiteListModule = map[string]struct{}{
+	"/cosmos.gov.v1.MsgUpdateParams":                       {},
+	"/cosmos.bank.v1beta1.MsgUpdateParams":                 {},
+	"/cosmos.staking.v1beta1.MsgUpdateParams":              {},
+	"/cosmos.distribution.v1beta1.MsgUpdateParams":         {},
+	"/cosmos.mint.v1beta1.MsgUpdateParams":                 {},
+	"/cosmos.gov.v1beta1.TextProposal":                     {},
+	"/ibc.applications.transfer.v1.MsgUpdateParams":        {},
+	"/interchain_security.ccv.consumer.v1.MsgUpdateParams": {},
+	"/cosmos.upgrade.v1beta1.MsgSoftwareUpgrade":           {},
+	"/cosmos.upgrade.v1beta1.MsgCancelUpgrade":             {},
+}
+
+func isModuleWhiteList(typeUrl string) bool {
+	_, found := whiteListModule[typeUrl]
+	return found
 }
