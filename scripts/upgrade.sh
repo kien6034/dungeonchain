@@ -3,13 +3,13 @@
 # the upgrade is a fork, "true" otherwise
 FORK=${FORK:-"false"}
 
-OLD_VERSION=v0.1.0
+OLD_VERSION=v1
 UPGRADE_WAIT=${UPGRADE_WAIT:-20}
 HOME=mytestnet
 ROOT=$(pwd)
 DENOM=udgn
 CHAIN_ID=localdungeon
-SOFTWARE_UPGRADE_NAME="v1"
+SOFTWARE_UPGRADE_NAME="v2"
 SLEEP_TIME=2
 BINARY=dungeond
 export KEY="acc0"
