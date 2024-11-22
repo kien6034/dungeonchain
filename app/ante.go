@@ -65,7 +65,7 @@ func NewAnteHandler(options HandlerOptions) (sdk.AnteHandler, error) {
 
 	anteDecorators := []sdk.AnteDecorator{
 		ante.NewSetUpContextDecorator(), // outermost AnteDecorator. SetUpContext must be called first
-		ccvconsumerante.NewMsgFilterDecorator(options.ConsumerKeeper),
+		// ccvconsumerante.NewMsgFilterDecorator(options.ConsumerKeeper),
 		ccvconsumerante.NewDisabledModulesDecorator("/cosmos.evidence"),
 		ccvdemocracyante.NewForbiddenProposalsDecorator(consumerdemocracy.IsProposalWhitelisted, isModuleWhiteList),
 		wasmkeeper.NewLimitSimulationGasDecorator(options.WasmConfig.SimulationGasLimit), // after setup context to enforce limits early
