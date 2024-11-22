@@ -80,7 +80,7 @@ run_upgrade () {
 
     # Get upgrade height, 12 block after (6s)
     STATUS_INFO=($(./_build/old/$BINARY status --home $HOME | jq -r '.sync_info.latest_block_height'))
-    UPGRADE_HEIGHT=$((STATUS_INFO + 30))
+    UPGRADE_HEIGHT=$((STATUS_INFO + 100))
     echo "UPGRADE_HEIGHT = $UPGRADE_HEIGHT"
 
     tar -cf ./_build/new/$BINARY.tar -C ./_build/new $BINARY
@@ -127,7 +127,7 @@ EOF
 
     sleep 2
 
-    echo "Vote proposal user1"
+    echo "Vote proposal validator1"
 
     ./_build/old/$BINARY tx gov vote 1 yes --from $KEY --keyring-backend test --chain-id $CHAIN_ID --home $HOME -y > /dev/null
 
