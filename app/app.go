@@ -151,7 +151,6 @@ import (
 	packetforwardkeeper "github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8/packetforward/keeper"
 	packetforwardtypes "github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8/packetforward/types"
 
-	consumerdemocracy "github.com/cosmos/interchain-security/v5/app/consumer-democracy"
 	ccvconsumer "github.com/cosmos/interchain-security/v5/x/ccv/consumer"
 	ccvconsumerkeeper "github.com/cosmos/interchain-security/v5/x/ccv/consumer/keeper"
 	ccvconsumertypes "github.com/cosmos/interchain-security/v5/x/ccv/consumer/types"
@@ -628,7 +627,7 @@ func NewChainApp(
 		appCodec,
 		legacyAmino,
 		runtime.NewKVStoreService(keys[slashingtypes.StoreKey]),
-		&app.ConsumerKeeper,
+		app.StakingKeeper,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 
@@ -853,7 +852,6 @@ func NewChainApp(
 	app.ModuleManager = module.NewManager(
 		genutil.NewAppModule(
 			app.AccountKeeper,
-
 			&app.ConsumerKeeper,
 			app,
 			txConfig,
@@ -863,12 +861,11 @@ func NewChainApp(
 		bank.NewAppModule(appCodec, app.BankKeeper, app.AccountKeeper, app.GetSubspace(banktypes.ModuleName)),
 		feegrantmodule.NewAppModule(appCodec, app.AccountKeeper, app.BankKeeper, app.FeeGrantKeeper, app.interfaceRegistry),
 		//gov.NewAppModule(appCodec, &app.GovKeeper, app.AccountKeeper, app.BankKeeper, app.GetSubspace(govtypes.ModuleName)),
-		gov.NewAppModule(appCodec, app.GovKeeper, app.AccountKeeper, app.BankKeeper, consumerdemocracy.IsProposalWhitelisted, app.GetSubspace(govtypes.ModuleName), consumerdemocracy.IsModuleWhiteList),
+		gov.NewAppModule(appCodec, app.GovKeeper, app.AccountKeeper, app.BankKeeper, IsLegacyProposalWhitelisted, app.GetSubspace(govtypes.ModuleName), IsModuleWhiteList),
 		mint.NewAppModule(appCodec, app.MintKeeper, app.AccountKeeper, nil, app.GetSubspace(minttypes.ModuleName)),
 		slashing.NewAppModule(
 			appCodec, app.SlashingKeeper, app.AccountKeeper, app.BankKeeper,
-
-			app.ConsumerKeeper,
+			app.StakingKeeper,
 			app.GetSubspace(slashingtypes.ModuleName), app.interfaceRegistry),
 		//distr.NewAppModule(appCodec, app.DistrKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper, app.GetSubspace(distrtypes.ModuleName)),
 		distr.NewAppModule(appCodec, app.DistrKeeper, app.AccountKeeper, app.BankKeeper, *app.StakingKeeper, authtypes.FeeCollectorName, app.GetSubspace(distrtypes.ModuleName)),

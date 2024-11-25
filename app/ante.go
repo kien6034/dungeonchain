@@ -11,16 +11,15 @@ import (
 	circuitante "cosmossdk.io/x/circuit/ante"
 	circuitkeeper "cosmossdk.io/x/circuit/keeper"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/x/auth/ante"
-
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/x/auth/ante"
+	"github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
 
 	globalfeeante "github.com/strangelove-ventures/globalfee/x/globalfee/ante"
 	globalfeekeeper "github.com/strangelove-ventures/globalfee/x/globalfee/keeper"
 
-	consumerdemocracy "github.com/cosmos/interchain-security/v5/app/consumer-democracy"
 	ccvdemocracyante "github.com/cosmos/interchain-security/v5/app/consumer-democracy/ante"
 	ccvconsumerante "github.com/cosmos/interchain-security/v5/app/consumer/ante"
 	ccvconsumerkeeper "github.com/cosmos/interchain-security/v5/x/ccv/consumer/keeper"
@@ -67,7 +66,7 @@ func NewAnteHandler(options HandlerOptions) (sdk.AnteHandler, error) {
 		ante.NewSetUpContextDecorator(), // outermost AnteDecorator. SetUpContext must be called first
 		ccvconsumerante.NewMsgFilterDecorator(options.ConsumerKeeper),
 		ccvconsumerante.NewDisabledModulesDecorator("/cosmos.evidence"),
-		ccvdemocracyante.NewForbiddenProposalsDecorator(consumerdemocracy.IsProposalWhitelisted, isModuleWhiteList),
+		ccvdemocracyante.NewForbiddenProposalsDecorator(IsLegacyProposalWhitelisted, IsModuleWhiteList),
 		wasmkeeper.NewLimitSimulationGasDecorator(options.WasmConfig.SimulationGasLimit), // after setup context to enforce limits early
 		wasmkeeper.NewCountTXDecorator(options.TXCounterStoreService),
 		wasmkeeper.NewGasRegisterDecorator(options.WasmKeeper.GetGasRegister()),
@@ -104,7 +103,11 @@ var whiteListModule = map[string]struct{}{
 	"/cosmos.upgrade.v1beta1.MsgCancelUpgrade":             {},
 }
 
-func isModuleWhiteList(typeUrl string) bool {
+func IsModuleWhiteList(typeUrl string) bool {
 	_, found := whiteListModule[typeUrl]
 	return found
+}
+
+func IsLegacyProposalWhitelisted(content v1beta1.Content) bool {
+	return true
 }
