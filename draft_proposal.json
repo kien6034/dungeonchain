@@ -1,0 +1,41 @@
+{
+  "messages": [
+    {
+      "@type": "/cosmos.gov.v1.MsgUpdateParams",
+      "authority": "dungeon10d07y265gmmuvt4z0w9aw880jnsr700j53vrug",
+      "params": {
+        "min_deposit": [
+          {
+            "amount": "100000000",
+            "denom": "udgn"
+          }
+        ],
+        "max_deposit_period": "72h0m0s",
+        "voting_period": "72h0m0s",
+        "quorum": "0.334000000000000000",
+        "threshold": "0.500000000000000000",
+        "veto_threshold": "0.334000000000000000",
+        "min_initial_deposit_ratio": "0.000000000000000000",
+        "proposal_cancel_ratio": "0.500000000000000000",
+        "proposal_cancel_dest": "",
+        "expedited_voting_period": "48h0m0s",
+        "expedited_threshold": "0.510000000000000000",
+        "expedited_min_deposit": [
+          {
+            "amount": "1000000000",
+            "denom": "udgn"
+          }
+        ],
+        "burn_vote_quorum": false,
+        "burn_proposal_deposit_prevote": false,
+        "burn_vote_veto": true,
+        "min_deposit_ratio": "0.100000000000000000"
+      }
+    }
+  ],
+  "metadata": "ipfs://QmegddUkxHqZCmMtTYbgf4bfX7ogEPf3gCzP7GUxk14MB7",
+  "deposit": "100000000udgn",
+  "title": "Proposal: Change the voting period to 3 days",
+  "summary": "This proposal proposes to change the voting period from 5 days to 3 days.",
+  "expedited": false
+}

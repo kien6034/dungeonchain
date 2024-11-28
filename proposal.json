@@ -1,0 +1,19 @@
+{
+    "messages": [
+        {
+            "@type": "/cosmos.upgrade.v1beta1.MsgSoftwareUpgrade",
+            "authority": "dungeon10d07y265gmmuvt4z0w9aw880jnsr700j53vrug",
+            "plan": {
+                "name": "v2",
+                "time": "0001-01-01T00:00:00Z",
+                "height": "100",
+                "info": "test",
+                "upgraded_client_state": null
+            }
+        }
+    ],
+    "metadata": "ipfs://CID",
+    "deposit": "200000udgn",
+    "title": "Software Upgrade v2",
+    "summary": "Upgrade to version v2"
+}
